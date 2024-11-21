@@ -1,7 +1,7 @@
 name: ci frontend
 
 on:
-  workflow _dispatch:
+  workflow_dispatch:
     outputs:
       tag_image:
         value: ${{ jobs.ci.outputs.imagen_docker}}
