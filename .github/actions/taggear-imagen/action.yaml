@@ -1,0 +1,36 @@
+name: "Taggear la imagen docker"
+description: "Se etiqueta la imagen de docker antes de subirla al registry"
+inputs:
+  image_name:
+    description: "Nombre de la imagen"
+    required: true
+
+  version:
+    description: "version de la app"
+    required: true
+
+outputs:
+  tag:
+    description: "Nombre completo de la imagen docker"
+    value: ${{ steps.tag-imagen.outputs.tag }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: mostrar directorio
+      shell: bash
+      run: ls -la
+
+    - name: extraer inputs
+      id: tag-imagen
+      shell: bash
+      env:
+        user: ${{env.username}}
+      run: |
+        image_name=${{inputs.image_name}}
+        version=${{inputs.version}}
+
+        nombre_completo="$user/$image_name:$version"
+        echo "el nombre completo de la imagen es: $nombre_completo"
+
+        echo "tag=$nombre_completo" >> $GITHUB_OUTPUT
