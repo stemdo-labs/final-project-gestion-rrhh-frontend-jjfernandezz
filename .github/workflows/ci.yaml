@@ -1,10 +1,10 @@
 name: ci frontend
 
 on:
-  workflow_dispatch:
-    # outputs:
-    #   tag_image:
-    #     value: ${{ jobs.ci.outputs.imagen_docker}}
+  workflow_call:
+    outputs:
+      tag_image:
+        value: ${{ jobs.ci.outputs.imagen_docker}}
 
 jobs:
 
