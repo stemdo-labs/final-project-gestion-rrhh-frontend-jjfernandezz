@@ -2,6 +2,12 @@ name: ci frontend
 
 on:
   workflow_call:
+    secrets:
+        ARM_CLIENT_ID:
+          required: true
+        ARM_CLIENT_SECRET:
+          required: true
+          
     outputs:
       tag_image:
         value: ${{ jobs.ci.outputs.imagen_docker}}
