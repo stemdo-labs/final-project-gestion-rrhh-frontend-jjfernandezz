@@ -1,11 +1,10 @@
 name: ci frontend
 
 on:
-  workflow_dispatch:
+  workflow_call:
     outputs:
       tag_image:
         value: ${{ jobs.ci.outputs.imagen_docker}}
-
 
 jobs:
 
@@ -43,7 +42,7 @@ jobs:
       - name: Login to Azure Container Registry
         uses: docker/login-action@v3
         with:
-          login-server: 'containerregistryjoel.azurecr.io'
+          registry: containerregistryjoel.azurecr.io
           username: ${{ Secrets.ARM_CLIENT_ID }}
           password: ${{ secrets.ARM_CLIENT_SECRET }}
       
