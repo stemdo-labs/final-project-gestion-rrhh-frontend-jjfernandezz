@@ -41,14 +41,29 @@ jobs:
           sudo apt-get update
           sudo apt-get install helm
       
-      - name: Crear Secreto para credenciales Azure Container Registry
+      - name: Crear namespace si no esta creado anteriormente
         run: |
-          kubectl create ns rrhh
-          kubectl create secret docker-registry acr-secret \
-            --namespace rrhh \
-            --docker-server=${{ vars.DOCKER_USERNAME }} \
-            --docker-username=${{ secrets.ARM_CLIENT_ID }} \
-            --docker-password=${{ secrets.ARM_CLIENT_SECRET}}
+          if ! kubectl get ns rrhh > /dev/null 2>&1; then
+            kubectl create ns rrhh
+          fi
+
+      - name: Crear Secret para credenciales Azure Container Registry
+        run: |
+            if ! kubectl get secrets acr-secret -n rrhh > /dev/null 2>&1; then
+              kubectl create secret docker-registry acr-secret \
+                --namespace rrhh \
+                --docker-server=${{ vars.DOCKER_USERNAME }} \
+                --docker-username=${{ secrets.ARM_CLIENT_ID }} \
+                --docker-password=${{ secrets.ARM_CLIENT_SECRET}}
+            fi
+      # - name: Crear Secreto para credenciales Azure Container Registry
+      #   run: |
+      #     kubectl create ns rrhh
+      #     kubectl create secret docker-registry acr-secret \
+      #       --namespace rrhh \
+      #       --docker-server=${{ vars.DOCKER_USERNAME }} \
+      #       --docker-username=${{ secrets.ARM_CLIENT_ID }} \
+      #       --docker-password=${{ secrets.ARM_CLIENT_SECRET}}
 
       - name: Logearse en harbor
         run:  helm registry login harbor.codeops.es -u jfernandez -p ${{ secrets.HARBOR_PASSWORD }}
