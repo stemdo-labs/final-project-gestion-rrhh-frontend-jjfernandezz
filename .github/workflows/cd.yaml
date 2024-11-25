@@ -77,12 +77,3 @@ jobs:
         run: |
           helm list
           helm history app-k8s
-
-      # - name: hacemos pull de la imagen
-      #   run: docker pull ${{inputs.imagen_docker_completa}}
-
-      # - name: hacer run del contenedor
-      #   run: docker run -dit -p 8080:8080 ${{inputs.imagen_docker_completa}} 
-
-      # - name: comprobar el despliegue haciendo curl
-      #   run: curl http://localhost:8080
