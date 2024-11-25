@@ -56,24 +56,16 @@ jobs:
                 --docker-username=${{ secrets.ARM_CLIENT_ID }} \
                 --docker-password=${{ secrets.ARM_CLIENT_SECRET}}
             fi
-      # - name: Crear Secreto para credenciales Azure Container Registry
-      #   run: |
-      #     kubectl create ns rrhh
-      #     kubectl create secret docker-registry acr-secret \
-      #       --namespace rrhh \
-      #       --docker-server=${{ vars.DOCKER_USERNAME }} \
-      #       --docker-username=${{ secrets.ARM_CLIENT_ID }} \
-      #       --docker-password=${{ secrets.ARM_CLIENT_SECRET}}
 
       - name: Logearse en harbor
         run:  helm registry login harbor.codeops.es -u jfernandez -p ${{ secrets.HARBOR_PASSWORD }}
 
       - name: Actualizar chart con Helm
         run: |
-          helm upgrade --install app-k8s oci://harbor.codeops.es/jfernandez/final-project-chart-joel \
+          helm upgrade --install app-frontend oci://harbor.codeops.es/jfernandez/frontend-final-project \
             --set frontend.image=${{inputs.imagen_docker_completa}}
       
       - name: Mostrar lista helm
         run: |
           helm list
-          helm history app-k8s
+          helm history app-frontend
