@@ -48,13 +48,13 @@ jobs:
       ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
 
-  # efectuar_cd_prod:
-  #   needs: [llamar_ci]
-  #   uses: jjfernandez/stemdo-labs/github-actions-exercises-jjfernandezz/.github/cd-frontend.yaml@main
-  #   with: 
-  #     imagen_docker_completa: "${{needs.ci-cd.outputs.imagen_docker}}"
-  #   secrets:
-  #     ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-  #     ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-  #     ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-  #     HARBOR_PASSWORD: ${{ secrets.HARBOR_PASSWORD }}
+  efectuar_cd_prod:
+    needs: [llamar_ci]
+    uses: jjfernandez/stemdo-labs/github-actions-exercises-jjfernandezz/.github/cd-frontend.yaml@main
+    with: 
+      imagen_docker_completa: "${{needs.llamar_ci.outputs.tag_image}}"
+    secrets:
+      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+      HARBOR_PASSWORD: ${{ secrets.HARBOR_PASSWORD }}
