@@ -6,19 +6,55 @@ on:
   
 jobs:
   ci-cd:
-    runs-on: ubuntu-latest
+    runs-on: runner-local-front
+    outputs:
+      imagen_docker: ${{steps.imagen_docker1.outputs.imagen_docker}}
     steps:
       - name: Inicio de ci/cd 
         run: echo "Se inicia la integracion y despliegue continuo"
 
+      - name: clonamos repo
+        uses: actions/checkout@v4
+
+      - name: Se obtiene la version
+        id: tomar_version
+        run: |
+          version=$(jq -r '.version' package.json)
+          echo "La version del la app es: $version"
+          echo "version=$version" >> $GITHUB_OUTPUT
+        
+      - name: accion composite
+        uses: ./.github/actions/taggear-imagen
+        id: tag
+        env:
+          username: ${{ vars.DOCKER_USERNAME }}
+        with:
+          image_name: "frontend"
+          version: "${{steps.tomar_version.outputs.version}}"
+
+      - name: Mostrar imagen completa
+        run: echo ${{ steps.tag.outputs.tag}}
+
+      - name: Guardar output 
+        id: imagen_docker1
+        run: echo "imagen_docker=${{steps.tag.outputs.tag}}" >> $GITHUB_OUTPUT
+
   llamar_ci:
     needs: ci-cd
-    uses: ./.github/workflows/ci.yaml
-    # secrets:
-    #   DOCKERHUB_TOKEN: ${{secrets.DOCKERHUB_TOKEN}}
+    uses: stemdo-labs/final-project-exercise-jjfernandezz/.github/workflows/ci-frontend.yaml@main
+    with: 
+      imagen_docker_completa: "${{needs.ci-cd.outputs.imagen_docker}}"
+    secrets:
+      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
 
   efectuar_cd_prod:
     needs: [llamar_ci]
-    uses: ./.github/workflows/cd.yaml
+    uses: stemdo-labs/final-project-exercise-jjfernandezz/.github/workflows/cd-frontend.yaml@main
     with: 
       imagen_docker_completa: "${{needs.llamar_ci.outputs.tag_image}}"
+    secrets:
+      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+      HARBOR_PASSWORD: ${{ secrets.HARBOR_PASSWORD }}
