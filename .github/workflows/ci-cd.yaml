@@ -50,7 +50,7 @@ jobs:
 
   efectuar_cd_prod:
     needs: [llamar_ci]
-    uses: jjfernandez/stemdo-labs/github-actions-exercises-jjfernandezz/.github/cd-frontend.yaml@main
+    uses: stemdo-labs/final-project-exercise-jjfernandezz/.github/workflows/cd-frontend.yaml@main
     with: 
       imagen_docker_completa: "${{needs.llamar_ci.outputs.tag_image}}"
     secrets:
