@@ -38,7 +38,7 @@ jobs:
 
   llamar_ci:
     needs: ci-cd
-    uses: stemdo-labs/github-actions-exercises-jjfernandezz/.github/workflows/ci-frontend.yaml@main
+    uses: stemdo-labs/final-project-exercise-jjfernandezz/.github/workflows/ci-frontend.yaml@main
     with: 
       imagen_docker_completa: "${{needs.ci-cd.outputs.imagen_docker}}"
     secrets:
