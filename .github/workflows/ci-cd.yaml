@@ -9,7 +9,7 @@ on:
   
 jobs:
   ci-cd:
-    runs-on: runner-stemdo-labs
+    runs-on: runner-local-front
     outputs:
       imagen_docker: ${{steps.imagen_docker1.outputs.imagen_docker}}
     steps:
