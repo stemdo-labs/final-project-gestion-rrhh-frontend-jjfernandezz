@@ -19,6 +19,7 @@ jobs:
         with:
           args: >
             -Dsonar.projectKey=prueba-joel
+            -Dsonar.profile=Joel_javascript
       - uses: sonarsource/sonarqube-quality-gate-action@master
         timeout-minutes: 5
         env:
